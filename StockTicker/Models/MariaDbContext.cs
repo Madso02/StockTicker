@@ -10,5 +10,7 @@ namespace StockTicker.Models
         }
 
         public virtual DbSet<StockTickerItem> StockTickerItems { get; set; }
+        public virtual DbSet<Overview> Overviews { get; set; }
+        public virtual DbSet<OverviewStockTickerItem> OverviewsStockTickerItems { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace StockTicker.Controllers
             }
 
             var stockTicker = await _context.StockTickerItems
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (stockTicker == null)
             {
                 return NotFound();
@@ -53,7 +53,7 @@ namespace StockTicker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Symbol,Price")] StockTickerItem stockTicker)
+        public async Task<IActionResult> Create([Bind("ID,Symbol,Price")] StockTickerItem stockTicker)
         {
             if (ModelState.IsValid)
             {
@@ -85,9 +85,9 @@ namespace StockTicker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,Symbol,Price")] StockTickerItem stockTicker)
+        public async Task<IActionResult> Edit(int? id, [Bind("ID,Symbol,Price")] StockTickerItem stockTicker)
         {
-            if (id != stockTicker.Id)
+            if (id != stockTicker.ID)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace StockTicker.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StockTickerExists(stockTicker.Id))
+                    if (!StockTickerExists(stockTicker.ID))
                     {
                         return NotFound();
                     }
@@ -124,7 +124,7 @@ namespace StockTicker.Controllers
             }
 
             var stockTicker = await _context.StockTickerItems
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (stockTicker == null)
             {
                 return NotFound();
@@ -150,7 +150,7 @@ namespace StockTicker.Controllers
 
         private bool StockTickerExists(int? id)
         {
-            return _context.StockTickerItems.Any(e => e.Id == id);
+            return _context.StockTickerItems.Any(e => e.ID == id);
         }
     }
 }

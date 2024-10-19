@@ -2,8 +2,8 @@
 {
     public class StockTickerItem
     {
-        public int? Id { get; set; }
-        public string? Symbol { get; set; }
+        public int? ID { get; set; }
+        public required string Symbol { get; set; }
         public decimal Price {  get; set; } 
     }
 }
