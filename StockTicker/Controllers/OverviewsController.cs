@@ -29,7 +29,7 @@ namespace StockTicker.Controllers
 
         // GET: api/Overviews/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Overview>> GetOverview(int? id)
+        public async Task<ActionResult<Overview>> GetOverview(long id, string includeStockTickers = "false")
         {
             var overview = await _context.Overviews.FindAsync(id);
 
@@ -38,18 +38,32 @@ namespace StockTicker.Controllers
                 return NotFound();
             }
 
+            bool inclueStockTickerItems = includeStockTickers == "true";
+
+            if (!inclueStockTickerItems)
+            {
+                overview.OverviewStockTickerItems = null;
+            }
+
             return overview;
         }
 
         // PUT: api/Overviews/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOverview(int? id, Overview overview)
+        public async Task<IActionResult> PutOverview(long id, OverviewDTO overviewDTO)
         {
-            if (id != overview.ID)
+            Overview? overview = await _context.Overviews.FindAsync(id);
+
+
+            if (overview == null)
             {
-                return BadRequest();
+                return NotFound();
             }
+
+            overview = PatchOverview(overviewDTO, overview);
+
+
 
             _context.Entry(overview).State = EntityState.Modified;
 
@@ -85,7 +99,7 @@ namespace StockTicker.Controllers
 
         // DELETE: api/Overviews/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOverview(int? id)
+        public async Task<IActionResult> DeleteOverview(long id)
         {
             var overview = await _context.Overviews.FindAsync(id);
             if (overview == null)
@@ -99,9 +113,19 @@ namespace StockTicker.Controllers
             return NoContent();
         }
 
-        private bool OverviewExists(int? id)
+        private bool OverviewExists(long id)
         {
             return _context.Overviews.Any(e => e.ID == id);
         }
+
+        private static Overview PatchOverview(OverviewDTO overviewDTO, Overview overview)
+        {
+            overview.Name = overviewDTO.Name != null ? overviewDTO.Name.Trim() : overview.Name;
+            overview.Description = overviewDTO.Description != null ? overviewDTO.Description.Trim() : overview.Description;
+            overview.OverviewStockTickerItems = overviewDTO.OverviewStockTickerItems ?? overview.OverviewStockTickerItems;
+            return overview;
+        }
+
+
     }
 }
